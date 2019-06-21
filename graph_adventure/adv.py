@@ -21,7 +21,69 @@ player = Player("Name", world.startingRoom)
 
 
 # FILL THIS IN
-traversalPath = ['n', 's']
+    #add stack
+    #loop through the graph
+    #get current room and availale exits in that room
+    #follow directions of available exits
+
+traversalPath = ['n', 's', 'e', 'w']
+trav_graph = {}
+
+class Stack:
+    def __init__(self):
+        self.stack = []
+    def push(self, value):
+        self.stack.append(value)
+    def pop(self):
+        if self.size() > 0:
+            return self.stack.pop()
+        else:
+            return None
+    def size(self):
+        return len(self.stack)
+
+stack = Stack()
+
+
+#loop through, get current room
+while len(traversalPath) and len (trav_graph) < 2000:
+    currRoom = player.currentRoom.id
+    #get exits for current room
+    if currRoom not in trav_graph:
+        currExits = {}
+
+        for eachExit in player.currentRoom.getExits():
+            currExits[eachExit] = "?"
+        trav_graph[currRoom] = currExits
+    
+    currExits = trav_graph[currRoom]
+
+    #NORTH
+    if "n" in currExits and currExits["n"] == "?":
+        player.travel("n")
+        traversalPath.append("n")
+        nextRoom = player.currentRoom.id
+        currExits["n"] = nextRoom
+
+        if nextRoom not in trav_graph:
+            nextRoomExits = {}
+
+            for exits in player.currentRoom.getExits():
+                nextRoomExits[exits] = "?"
+
+            nextRoomExits["s"] = currRoom
+            trav_graph[nextRoom] = nextRoomExits
+
+        else:
+            trav_graph[nextRoom]["s"] = currRoom
+        stack.push("s")
+
+    #SOUTH
+
+    #EAST
+
+    #WEST
+
 
 
 # TRAVERSAL TEST
